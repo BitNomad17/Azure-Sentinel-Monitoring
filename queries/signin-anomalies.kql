@@ -1,0 +1,30 @@
+// Suspicious sign-in activity: multiple failures, multiple countries, high-risk locations
+let FailureThreshold = 10;
+let LookbackHours = 4;
+let HighRiskCountries = dynamic(["RU", "KP", "IR", "CN"]); // example only – tune for your org
+SigninLogs
+| where TimeGenerated > ago(LookbackHours * 1h)
+| extend Country = tostring(LocationDetails.countryOrRegion)
+| summarize
+    FailedLogons = countif(ResultType != 0),
+    SuccessfulLogons = countif(ResultType == 0),
+    FirstSeen = min(TimeGenerated),
+    LastSeen  = max(TimeGenerated),
+    Countries = make_set(Country)
+  by UserPrincipalName, IPAddress
+| where FailedLogons >= FailureThreshold
+      or array_length(Countries) > 1
+      or set_intersect(Countries, HighRiskCountries) != dynamic([])
+| extend Reason = strcat(
+    iif(FailedLogons >= FailureThreshold, "Multiple failed sign-ins; ", ""),
+    iif(array_length(Countries) > 1, "Multiple countries; ", ""),
+    iif(set_intersect(Countries, HighRiskCountries) != dynamic([]), "High-risk country; ", "")
+)
+| project TimeGenerated = LastSeen,
+          UserPrincipalName,
+          IPAddress,
+          FailedLogons,
+          SuccessfulLogons,
+          Countries,
+          Reason
+| order by TimeGenerated desc
