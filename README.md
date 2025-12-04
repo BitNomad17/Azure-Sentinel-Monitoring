@@ -97,3 +97,33 @@ This lab has been tested in a personal Azure subscription with:
 - Azure AD sign-in logs
 - Azure Activity logs
 - Microsoft Sentinel enabled on a single workspace
+
+
+## Screenshots
+
+Below are sample screenshots demonstrating how Microsoft Sentinel and Azure Log Analytics
+visualize data, run KQL queries, generate incidents, and create analytics rules.
+
+### 🔹 Sentinel Overview Dashboard
+Shows incidents, alerts, and event trends.
+![Sentinel Overview](images/sentinel-overview.png)
+
+### 🔹 Sentinel Incidents Page
+Displays security incidents generated from analytics rules and anomaly detections.
+![Sentinel Incidents](images/sentinel-incidents.png)
+
+### 🔹 KQL Query Execution in Logs
+Query window used to run detections such as sign-in anomalies or privilege escalations.
+![KQL Query Results](images/kql-query-results.png)
+
+### 🔹 Scheduled Analytics Rule (Query Rule)
+Shows how detections are operationalized using Sentinel analytics.
+![Analytics Rule](images/analytics-rule.png)
+
+### 🔹 Azure Log Analytics Query Results
+Basic query results showing structured log events feeding Sentinel.
+![Log Analytics Query](images/loganalytics-query.png)
+
+### 🔹 Workbook Visualization
+Dashboard visualizing insights, trends, and context from Sentinel data.
+![Sentinel Workbook](images/sentinel-workbook.png)
