@@ -89,3 +89,11 @@ Detects privileged role assignments such as:
   - Admin role changes over time
 
 This lab is for learning and demonstration. Always tune detections for your environment before production use.
+
+
+## Demo Status
+
+This lab has been tested in a personal Azure subscription with:
+- Azure AD sign-in logs
+- Azure Activity logs
+- Microsoft Sentinel enabled on a single workspace
