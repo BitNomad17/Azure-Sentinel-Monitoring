@@ -1,0 +1,22 @@
+// Privilege escalations: new assignments to high-privilege roles in the last 7 days
+let LookbackDays = 7;
+let HighPrivRoles = dynamic([
+  "Global Administrator",
+  "Privileged Role Administrator",
+  "User Access Administrator",
+  "Security Administrator"
+]);
+AuditLogs
+| where TimeGenerated > ago(LookbackDays * 1d)
+| where OperationName has_any ("Add member to role", "Add role assignment")
+| extend TargetRole = tostring(TargetResources[0].displayName)
+| extend TargetUser = tostring(TargetResources[0].userPrincipalName)
+| where TargetRole in (HighPrivRoles)
+| project TimeGenerated,
+          InitiatedBy = tostring(InitiatedBy.user.userPrincipalName),
+          TargetUser,
+          TargetRole,
+          OperationName,
+          Category,
+          Result
+| order by TimeGenerated desc
